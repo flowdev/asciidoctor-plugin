@@ -29,12 +29,29 @@ public class FlowparserBlockProcessorTest {
         String inputAdoc = "Bla bla\n" +
                 "\n" +
                 "[flowdev]\n" +
-                "flowdev block!\n" +
+                "....\n" +
+                "flow NumberedPorts {\n" +
+                "    -> doIt() -> doThis() -> doThat() -> ;\n" +
+                "\n" +
+                "\n" +
+                "    -> subIn.0 doIt() subOut.0 -> subIn.0 doThis() subOut.0 -> subIn.0 doThat() subOut.0 -> ;\n" +
+                "\n" +
+                "    -> subIn.1 doIt() subOut.1 -> subIn.1 doThis() subOut.1 -> subIn.1 doThat() subOut.1 -> ;\n" +
+                "\n" +
+                "    -> subIn.2 doIt() subOut.2 -> subIn.2 doThis() subOut.2 -> subIn.2 doThat() subOut.2 -> ;\n" +
+                "}\n" +
+                "....\n" +
                 "\n" +
                 "Blue blue\n";
 
         String expectedHtml = "<div class=\"paragraph\">\n" +
-                "<p>Writing AsciiDoc is <em>easy</em>!</p>\n" +
+                "<p>Bla bla</p>\n" +
+                "</div>\n" +
+                "<div class=\"paragraph\">\n" +
+                "<p>flowdev BlockProcessor: flowdev block!</p>\n" +
+                "</div>\n" +
+                "<div class=\"paragraph\">\n" +
+                "<p>Blue blue</p>\n" +
                 "</div>";
         String html = asciidoctor.convert(inputAdoc, options);
         Assert.assertEquals("The wrong asciidoc is generated!", expectedHtml, html);
