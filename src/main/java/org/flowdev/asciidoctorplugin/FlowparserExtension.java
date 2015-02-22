@@ -12,7 +12,6 @@ import java.io.InputStream;
 public class FlowparserExtension implements ExtensionRegistry {
     @Override
     public void register(Asciidoctor asciidoctor) {
-        System.err.println("Registering extension: flowdev");
 //        RubyExtensionRegistry rubyExtensionRegistry = asciidoctor
 //                .rubyExtensionRegistry();
 //        InputStream diagramRbInputStream = this.getClass().getResourceAsStream(
@@ -25,6 +24,5 @@ public class FlowparserExtension implements ExtensionRegistry {
         JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
         javaExtensionRegistry.preprocessor(FlowparserPreprocessor.class);
 //        javaExtensionRegistry.block("flowdev", new FlowparserBlockProcessor("flowdev", asciidoctor));
-        System.err.println("Registered extension: flowdev");
     }
 }
