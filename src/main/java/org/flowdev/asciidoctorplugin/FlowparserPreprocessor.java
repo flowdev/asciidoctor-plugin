@@ -3,6 +3,7 @@ package org.flowdev.asciidoctorplugin;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
+import org.flowdev.flowparser.PluginMain;
 
 import java.util.List;
 import java.util.Map;
@@ -38,21 +39,9 @@ public class FlowparserPreprocessor extends Preprocessor {
                 if (inFlowdev && inLiteral) {
                     inFlowdev = false;
                     inLiteral = false;
-                    sbDoc.append("\n[graphviz, ").append(flowName).append(", svg]\n....\n");
-//                    sbDoc.append(sbFlow);
-                    sbDoc.append("digraph Mini {\n" +
-                            "  // rankdir=LR;\n" +
-                            "  node [shape=Mrecord,style=filled,fillcolor=\"#00CC00\",rank=same];\n" +
-                            "\n" +
-                            "  doIt [label=\"doIt\\n(DoIt)|{ <in> in| }\"] ;\n" +
-                            "\n" +
-                            "  node [shape=plaintext,style=plain,rank=same];\n" +
-                            "\n" +
-                            "  \"in\" -> doIt:in ;\n" +
-                            "}\n");
-                    sbDoc.append("....\n\n");
-                    sbFlow.insert(0, "flow " + flowName + " {\n");
+                    sbFlow.insert(0, "version 0.1\nflow " + flowName + " {\n");
                     sbFlow.append("}\n");
+                    sbDoc.append(PluginMain.compileFlowToAdoc(sbFlow.toString()));
                     System.err.print("Appending FlowDev block: " + sbFlow);
                     sbFlow = new StringBuilder(2048);
                     System.err.println("FlowDev block ended!");
@@ -67,7 +56,7 @@ public class FlowparserPreprocessor extends Preprocessor {
                 Matcher m = p.matcher(line);
                 if (m.matches()) {
                     flowName = m.group(1) == null ? "FlowDiagram" : m.group(1);
-                    System.err.print("FlowDev block found: " + flowName);
+                    System.err.println("FlowDev block found: " + flowName);
                     inFlowdev = true;
                 } else {
                     sbDoc.append(line).append("\n");
