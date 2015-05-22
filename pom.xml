@@ -10,10 +10,10 @@
 
     <properties>
         <flowdev.version>0.0.2-SNAPSHOT</flowdev.version>
-        <asciidoctor.version>1.5.2</asciidoctor.version>
-        <diagram.version>1.2.1-java</diagram.version>
+        <asciidoctor.version>1.5.1</asciidoctor.version>
+        <diagram.version>1.2.0</diagram.version>
 
-        <jruby.version>1.7.16.1</jruby.version>
+        <jruby.version>1.7.9</jruby.version>
         <gem.home.directory>classes</gem.home.directory>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,6 +25,18 @@
             <url>http://rubygems-proxy.torquebox.org/releases</url>
         </repository>
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>rubygems</groupId>
+                <artifactId>asciidoctor</artifactId>
+                <version>1.5.1</version>
+                <type>gem</type>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -99,6 +111,8 @@
                                     <mainClass>org.asciidoctor.cli.AsciidoctorInvoker</mainClass>
                                 </transformer>
                             </transformers>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>full</shadedClassifierName>
                             <artifactSet>
                                 <excludes>
                                     <exclude>rubygems:*</exclude>

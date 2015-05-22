@@ -19,7 +19,9 @@ public class FlowparserPreprocessor extends Preprocessor {
     @Override
     public PreprocessorReader process(Document document, PreprocessorReader reader) {
         int lineno = reader.getLineno();
-        reader.push_include(readDocument(reader), document.getAttributes().get("docfile").toString(), document.getAttributes().get("docdir").toString(), lineno, document.getAttributes());
+		Map<String, Object> attributes = document.getAttributes();
+		// The casts are necessary because the strings can be null:
+        reader.push_include(readDocument(reader), (String) attributes.get("docfile"), (String) attributes.get("docdir"), lineno, attributes);
         return reader;
     }
 
