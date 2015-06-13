@@ -11,6 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FlowparserPreprocessor extends Preprocessor {
+    public static final String DEFAULT_FLOW_NAME = "FlowDiagram";
+    public static final String DEFAULT_ORIENTATION = "vertical";
 
     public FlowparserPreprocessor(Map<String, Object> config) {
         super(config);
@@ -30,8 +32,9 @@ public class FlowparserPreprocessor extends Preprocessor {
         StringBuilder sbFlow = new StringBuilder(2048);
         boolean inFlowdev = false;
         boolean inLiteral = false;
-        String flowName = "FlowDiagram";
-        Pattern p = Pattern.compile("\\[flowdev\\s*[,]?\\s*(\\w+)?\\s*\\]\\s*");
+        String flowName = DEFAULT_FLOW_NAME;
+        String orientation = DEFAULT_ORIENTATION;
+        Pattern p = Pattern.compile("\\[flowdev\\s*(,\\s*(\\w+)\\s*(,\\s*(\\w+)\\s*)?)?\\s*\\]\\s*");
 
         List<String> lines = reader.readLines();
         for (String line : lines) {
@@ -41,7 +44,7 @@ public class FlowparserPreprocessor extends Preprocessor {
                     inLiteral = false;
                     sbFlow.insert(0, "version 0.1\nflow " + flowName + " {\n");
                     sbFlow.append("}\n");
-                    sbDoc.append(PluginMain.compileFlowToAdoc(sbFlow.toString()));
+                    sbDoc.append(PluginMain.compileFlowToAdoc(sbFlow.toString(), orientation.substring(0, 1).equalsIgnoreCase("h")));
                     sbFlow = new StringBuilder(2048);
                 } else if (inFlowdev) {
                     inLiteral = true;
@@ -53,7 +56,8 @@ public class FlowparserPreprocessor extends Preprocessor {
             } else {
                 Matcher m = p.matcher(line);
                 if (m.matches()) {
-                    flowName = m.group(1) == null ? "FlowDiagram" : m.group(1);
+                    flowName = m.group(2) == null ? DEFAULT_FLOW_NAME : m.group(2);
+                    orientation = m.group(4) == null ? DEFAULT_ORIENTATION : m.group(4);
                     inFlowdev = true;
                 } else {
                     sbDoc.append(line).append("\n");
